@@ -4,7 +4,7 @@ A web-based ecosystem simulation game where players must create a balanced food 
 
 ## How to Play
 
-1. Open `index.html` in your web browser
+1. Visit [https://nitinnbisht.github.io/ecosystem-builder/](https://nitinnbisht.github.io/ecosystem-builder/) or run locally with `npm run dev`
 2. Click "Start Game" to begin the 35-minute timer
 3. Drag species from the right panel to the ecosystem grid
 4. Create a balanced ecosystem with:
@@ -34,21 +34,59 @@ A web-based ecosystem simulation game where players must create a balanced food 
 - Complete within 35 minutes
 - Maintain balanced predator-prey relationships
 
-## Files Structure
-- `index.html` - Main game interface
-- `styles.css` - Game styling and responsive design
-- `game.js` - Core game logic and mechanics
-- `README.md` - This documentation
+## Project Structure
+```
+src/
+├── components/          # Vue components
+│   ├── Header.vue      # Game header with timer
+│   ├── EcosystemPanel.vue  # Main ecosystem builder
+│   ├── SpeciesPanel.vue    # Species selection panel
+│   └── ...             # Other components
+├── data/               # Game data
+│   └── ecosystemData.js    # Species and location data
+├── App.vue             # Main Vue app
+└── main.js             # Vue app entry point
+```
 
 ## Features
-- Drag and drop species placement
-- Real-time ecosystem health monitoring
-- 35-minute time limit simulation
-- Responsive design for mobile/desktop
-- Visual feedback and progress tracking
+- **Vue.js 3** with Composition API
+- **Vite** for fast development and building
+- **Ecosystem Simulation** with 39 species across 3 environments
+- **Real-time Validation** of food webs and environmental compatibility
+- **Animated Backgrounds** for each ecosystem type
+- **Responsive Design** for mobile and desktop
+- **GitHub Pages Deployment** with automated CI/CD
 
-## Running the Game
-Simply open `index.html` in any modern web browser. No server required - runs completely locally.
+## Development Setup
+
+### Prerequisites
+- Node.js (version 18 or higher)
+- npm or yarn
+
+### Installation
+```bash
+# Clone the repository
+git clone https://github.com/nitinnbisht/ecosystem-builder.git
+cd ecosystem-builder
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+### Build for Production
+```bash
+# Build the project
+npm run build
+
+# Preview the build
+npm run preview
+```
+
+## Live Demo
+Play the game online: [https://nitinnbisht.github.io/ecosystem-builder/](https://nitinnbisht.github.io/ecosystem-builder/)
 
 ## Game Strategy Tips
 1. Start with producers (plants) as your foundation
