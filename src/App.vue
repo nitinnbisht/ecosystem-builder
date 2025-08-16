@@ -9,6 +9,10 @@
               @click="switchGame('ocean')">
         🌊 Ocean Cleanup
       </button>
+      <button :class="['game-btn', { active: currentGame === 'redrock' }]" 
+              @click="switchGame('redrock')">
+        🏔️ Red Rock Study
+      </button>
     </div>
 
     <!-- Ecosystem Game -->
@@ -119,6 +123,68 @@
         <button @click="restartOcean">Play Again</button>
       </div>
     </div>
+
+    <!-- Red Rock Study Game -->
+    <div v-if="currentGame === 'redrock'">
+      <div class="redrock-header">
+        <h1>Red Rock Study</h1>
+        <div class="redrock-timer">{{ redRockTimer }}</div>
+        <div class="phase-indicator">
+          Phase: {{ currentPhase }} ({{ currentPhaseIndex + 1 }}/4)
+        </div>
+      </div>
+      
+      <RedRockInvestigation 
+        v-if="currentPhase === 'Investigation'"
+        :dataSources="redRockDataSources"
+        @next-phase="nextPhase"
+        @update-journal="updateJournal"
+      />
+      
+      <RedRockAnalysis 
+        v-if="currentPhase === 'Analysis'"
+        :questions="analysisQuestions"
+        :journalSources="journalSources"
+        @next-phase="nextPhase"
+      />
+      
+      <RedRockReport 
+        v-if="currentPhase === 'Report'"
+        :chartTypes="chartTypes"
+        :analysisAnswers="analysisAnswers"
+        @next-phase="nextPhase"
+      />
+      
+      <RedRockMiniCases 
+        v-if="currentPhase === 'Mini Cases'"
+        :miniCases="miniCases"
+        @finish-game="finishRedRockGame"
+      />
+      
+      <div v-if="!redRockGameActive" class="redrock-start">
+        <button @click="startRedRockGame" class="start-redrock-btn">
+          Start Red Rock Study (35 min)
+        </button>
+      </div>
+      
+      <div v-if="redRockGameComplete" class="redrock-result">
+        <h2>Red Rock Study Complete!</h2>
+        <div class="final-redrock-scores">
+          <div class="score-section">
+            <h3>Product Score: {{ redRockFinalScore.product }}%</h3>
+            <p>Based on calculation accuracy and report quality</p>
+          </div>
+          <div class="score-section">
+            <h3>Process Score: {{ redRockFinalScore.process }}%</h3>
+            <p>Based on efficiency and time management</p>
+          </div>
+          <div class="total-redrock-score">
+            <strong>Total Score: {{ redRockFinalScore.total }}%</strong>
+          </div>
+        </div>
+        <button @click="restartRedRock">Play Again</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -131,8 +197,13 @@ import GameStatus from './components/GameStatus.vue'
 import ResultModal from './components/ResultModal.vue'
 import OceanSitePanel from './components/OceanSitePanel.vue'
 import MicrobeSelectionPanel from './components/MicrobeSelectionPanel.vue'
+import RedRockInvestigation from './components/RedRockInvestigation.vue'
+import RedRockAnalysis from './components/RedRockAnalysis.vue'
+import RedRockReport from './components/RedRockReport.vue'
+import RedRockMiniCases from './components/RedRockMiniCases.vue'
 import { speciesDatabase, locations, getRandomVariant } from './data/ecosystemData.js'
 import { oceanSites, generateMicrobePool, calculateSiteScore } from './data/oceanData.js'
+import { redRockDataSources, analysisQuestions, miniCases, chartTypes, calculateScore } from './data/redRockData.js'
 
 export default {
   name: 'App',
@@ -144,7 +215,11 @@ export default {
     GameStatus,
     ResultModal,
     OceanSitePanel,
-    MicrobeSelectionPanel
+    MicrobeSelectionPanel,
+    RedRockInvestigation,
+    RedRockAnalysis,
+    RedRockReport,
+    RedRockMiniCases
   },
   data() {
     return {
@@ -170,7 +245,21 @@ export default {
       currentSiteScore: null,
       showSiteResult: false,
       gameCompleted: false,
-      oceanTimerInterval: null
+      oceanTimerInterval: null,
+      // Red Rock Study game data
+      redRockGameActive: false,
+      redRockTimeLeft: 2100, // 35 minutes
+      redRockTimer: '35:00',
+      currentPhaseIndex: 0,
+      phases: ['Investigation', 'Analysis', 'Report', 'Mini Cases'],
+      journalSources: [],
+      analysisAnswers: {},
+      reportData: {},
+      miniCaseResults: {},
+      redRockGameComplete: false,
+      redRockFinalScore: { product: 0, process: 0, total: 0 },
+      redRockTimerInterval: null,
+      gameStartTime: null
     }
   },
   computed: {
@@ -217,6 +306,22 @@ export default {
     totalGameScore() {
       if (this.siteScores.length === 0) return 0
       return Math.round(this.siteScores.reduce((sum, score) => sum + score.total, 0) / this.siteScores.length)
+    },
+    // Red Rock Study computed properties
+    currentPhase() {
+      return this.phases[this.currentPhaseIndex] || 'Investigation'
+    },
+    redRockDataSources() {
+      return redRockDataSources
+    },
+    analysisQuestions() {
+      return analysisQuestions
+    },
+    miniCases() {
+      return miniCases
+    },
+    chartTypes() {
+      return chartTypes
     }
   },
   methods: {
@@ -386,8 +491,10 @@ export default {
     updateBackgroundClass() {
       if (this.currentGame === 'ecosystem') {
         document.body.className = this.variant.toLowerCase().replace(' ', '-')
-      } else {
+      } else if (this.currentGame === 'ocean') {
         document.body.className = 'ocean-cleanup'
+      } else if (this.currentGame === 'redrock') {
+        document.body.className = 'red-rock-study'
       }
     },
     // Game switcher methods
@@ -481,7 +588,80 @@ export default {
       this.currentSiteScore = null
       this.showSiteResult = false
     },
-
+    // Red Rock Study game methods
+    startRedRockGame() {
+      this.redRockGameActive = true
+      this.redRockTimeLeft = 2100 // 35 minutes
+      this.currentPhaseIndex = 0
+      this.journalSources = []
+      this.analysisAnswers = {}
+      this.reportData = {}
+      this.miniCaseResults = {}
+      this.redRockGameComplete = false
+      this.gameStartTime = Date.now()
+      
+      this.redRockTimerInterval = setInterval(() => {
+        this.redRockTimeLeft--
+        this.updateRedRockTimer()
+        
+        if (this.redRockTimeLeft <= 0) {
+          this.forceFinishRedRock()
+        }
+      }, 1000)
+    },
+    updateRedRockTimer() {
+      const minutes = Math.floor(this.redRockTimeLeft / 60)
+      const seconds = this.redRockTimeLeft % 60
+      this.redRockTimer = `${minutes}:${seconds.toString().padStart(2, '0')}`
+    },
+    nextPhase(data) {
+      if (this.currentPhase === 'Investigation') {
+        this.journalSources = data || []
+      } else if (this.currentPhase === 'Analysis') {
+        this.analysisAnswers = data || {}
+      } else if (this.currentPhase === 'Report') {
+        this.reportData = data || {}
+      }
+      
+      this.currentPhaseIndex++
+    },
+    updateJournal(sources) {
+      this.journalSources = sources
+    },
+    finishRedRockGame(results) {
+      this.miniCaseResults = results
+      const totalTimeSpent = Math.round((Date.now() - this.gameStartTime) / 1000)
+      
+      // Calculate final score
+      const allAnswers = [
+        ...Object.values(this.analysisAnswers).map(a => ({ correct: true, points: 20 })), // Simplified
+        ...results.results.map(r => ({ correct: r.correct, points: 10 }))
+      ]
+      
+      this.redRockFinalScore = calculateScore(allAnswers, totalTimeSpent)
+      this.redRockGameComplete = true
+      this.redRockGameActive = false
+      
+      if (this.redRockTimerInterval) {
+        clearInterval(this.redRockTimerInterval)
+        this.redRockTimerInterval = null
+      }
+    },
+    forceFinishRedRock() {
+      this.finishRedRockGame({ results: [], correctAnswers: 0, totalCases: 0, averageTime: 0 })
+    },
+    restartRedRock() {
+      this.redRockGameComplete = false
+      this.redRockGameActive = false
+      this.redRockTimeLeft = 2100
+      this.redRockTimer = '35:00'
+      this.currentPhaseIndex = 0
+      this.journalSources = []
+      this.analysisAnswers = {}
+      this.reportData = {}
+      this.miniCaseResults = {}
+      this.redRockFinalScore = { product: 0, process: 0, total: 0 }
+    }
   },
   mounted() {
     this.variant = getRandomVariant()

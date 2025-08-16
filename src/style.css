@@ -389,6 +389,157 @@ body.ocean-cleanup::before {
   color: white;
 }
 
+/* Red Rock Study Background */
+body.red-rock-study {
+  background: linear-gradient(135deg, #8B4513 0%, #CD853F 50%, #DEB887 100%);
+  animation: rockFormation 10s ease-in-out infinite;
+}
+
+body.red-rock-study::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle 20px at 20% 80%, rgba(139, 69, 19, 0.3), transparent),
+    radial-gradient(circle 15px at 80% 20%, rgba(160, 82, 45, 0.4), transparent),
+    radial-gradient(circle 25px at 60% 60%, rgba(205, 133, 63, 0.2), transparent);
+  background-size: 300px 300px;
+  animation: dustParticles 15s linear infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes rockFormation {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes dustParticles {
+  0% { transform: translateX(-10px) translateY(10px); }
+  100% { transform: translateX(10px) translateY(-10px); }
+}
+
+/* Red Rock Study Game Styles */
+.redrock-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(139, 69, 19, 0.9);
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.redrock-header h1 {
+  color: white;
+  margin: 0;
+}
+
+.redrock-timer {
+  font-size: 1.5em;
+  font-weight: bold;
+  background: rgba(255,255,255,0.2);
+  padding: 10px 20px;
+  border-radius: 20px;
+}
+
+.phase-indicator {
+  background: rgba(255,255,255,0.3);
+  padding: 8px 16px;
+  border-radius: 15px;
+  font-size: 0.9em;
+}
+
+.redrock-start {
+  text-align: center;
+  padding: 50px;
+}
+
+.start-redrock-btn {
+  background: #8B4513;
+  color: white;
+  border: none;
+  padding: 20px 40px;
+  border-radius: 25px;
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.start-redrock-btn:hover {
+  background: #A0522D;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.redrock-result {
+  background: rgba(255,255,255,0.95);
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  margin: 20px 0;
+  backdrop-filter: blur(10px);
+}
+
+.redrock-result h2 {
+  margin-bottom: 20px;
+  color: #8B4513;
+}
+
+.final-redrock-scores {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.score-section {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  border-left: 4px solid #8B4513;
+  flex: 1;
+  min-width: 200px;
+}
+
+.score-section h3 {
+  margin-bottom: 10px;
+  color: #8B4513;
+}
+
+.score-section p {
+  color: #6c757d;
+  font-size: 0.9em;
+}
+
+.total-redrock-score {
+  background: #e7f3ff;
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 8px;
+  border: 2px solid #8B4513;
+  font-size: 1.2em;
+  color: #8B4513;
+}
+
+.redrock-result button {
+  background: #8B4513;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 25px;
+  font-size: 1.1em;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
 @media (max-width: 768px) {
   .game-area,
   .ocean-game-area {
