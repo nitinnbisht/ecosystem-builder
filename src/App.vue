@@ -104,6 +104,27 @@
         :currentLocation="currentLocation"
         @restart="restart"
       />
+      
+      <div class="hint-section">
+        <h4>💡 Solving Strategy Hints</h4>
+        <div class="hint-content">
+          <div class="hint-item">
+            <strong>1. Start with Producers:</strong> Always select 2-3 plant species first as they form the ecosystem foundation
+          </div>
+          <div class="hint-item">
+            <strong>2. Check Environmental Ranges:</strong> Verify each species' temp, elevation, wind, and pH ranges match the location
+          </div>
+          <div class="hint-item">
+            <strong>3. Build Food Chains:</strong> Ensure herbivores can eat your plants, and carnivores can eat your herbivores
+          </div>
+          <div class="hint-item">
+            <strong>4. Balance Trophic Levels:</strong> Use pyramid structure - more producers than primary consumers than secondary consumers
+          </div>
+          <div class="hint-item">
+            <strong>5. Include Decomposers:</strong> Add 1 decomposer to complete nutrient cycling
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Ocean Cleanup Game -->
@@ -200,6 +221,27 @@
           </div>
         </div>
         <button @click="restartOcean">Play Again</button>
+      </div>
+      
+      <div class="hint-section">
+        <h4>💡 Solving Strategy Hints</h4>
+        <div class="hint-content">
+          <div class="hint-item">
+            <strong>1. Calculate Averages First:</strong> Check if your 3 microbes' average attributes fall within site ranges
+          </div>
+          <div class="hint-item">
+            <strong>2. Required Trait Strategy:</strong> Always include at least 1 Cold Resistant microbe in your selection
+          </div>
+          <div class="hint-item">
+            <strong>3. Avoid Forbidden Traits:</strong> Never select any microbe with Toxic Producer trait
+          </div>
+          <div class="hint-item">
+            <strong>4. Optimize for 100% Score:</strong> All 3 attributes in range + required trait + no forbidden = 100%
+          </div>
+          <div class="hint-item">
+            <strong>5. Time Management:</strong> Spend ~10-12 minutes per site, save time for difficult sites
+          </div>
+        </div>
       </div>
     </div>
 
@@ -342,6 +384,27 @@
           </div>
         </div>
         <button @click="restartRedRock">Play Again</button>
+      </div>
+      
+      <div class="hint-section">
+        <h4>💡 Solving Strategy Hints</h4>
+        <div class="hint-content">
+          <div class="hint-item">
+            <strong>Investigation (5-8 min):</strong> Focus on economic data - population, GDP, revenue. Skip weather/healthcare unless directly relevant
+          </div>
+          <div class="hint-item">
+            <strong>Analysis (10-15 min):</strong> Use calculator for complex calculations. Double-check units (millions vs thousands). Show your work
+          </div>
+          <div class="hint-item">
+            <strong>Report (5-8 min):</strong> Line charts for trends over time, bar charts for comparisons, pie charts for proportions
+          </div>
+          <div class="hint-item">
+            <strong>Mini Cases (8-12 min):</strong> Read carefully for context clues. Estimate when exact calculation is complex. 2 min per case max
+          </div>
+          <div class="hint-item">
+            <strong>Time Strategy:</strong> Don't get stuck on one question. Move forward and return if time permits
+          </div>
+        </div>
       </div>
     </div>
   </div>

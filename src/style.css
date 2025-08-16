@@ -699,6 +699,54 @@ body.red-rock-study::before {
   }
 }
 
+/* Hint Section Styles */
+.hint-section {
+  background: rgba(255,255,255,0.95);
+  padding: 20px;
+  border-radius: 12px;
+  margin-top: 30px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border-left: 4px solid #28a745;
+}
+
+.hint-section h4 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-size: 1.2em;
+}
+
+.hint-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hint-item {
+  background: #f8f9fa;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border-left: 3px solid #28a745;
+  font-size: 0.9em;
+  line-height: 1.4;
+}
+
+.hint-item strong {
+  color: #2c3e50;
+}
+
+@media (max-width: 768px) {
+  .hint-section {
+    padding: 15px;
+    margin-top: 20px;
+  }
+  
+  .hint-item {
+    padding: 10px 12px;
+    font-size: 0.85em;
+  }
+}
+
 @media (max-width: 768px) {
   .game-area,
   .ocean-game-area {
