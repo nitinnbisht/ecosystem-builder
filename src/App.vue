@@ -17,12 +17,12 @@
 
     <!-- Ecosystem Game -->
     <div v-if="currentGame === 'ecosystem'">
-      <div v-if="!gameActive" class="ecosystem-objectives">
+      <div class="ecosystem-objectives">
         <div class="game-objectives">
           <h3>🎯 Game Objective</h3>
           <p>Create a balanced ecosystem with 8 species that can survive in the given environmental conditions.</p>
           
-          <div class="game-rules">
+          <div v-if="!gameActive" class="game-rules">
             <h4>📋 How to Play:</h4>
             <div class="rules-list">
               <div class="rule-item">
@@ -42,16 +42,16 @@
                 <div><strong>Ecosystem stability:</strong> Achieve 80%+ stability to win</div>
               </div>
             </div>
-          </div>
-          
-          <div class="scoring-info">
-            <h4>🏆 Success Criteria:</h4>
-            <ul>
-              <li><strong>Species Count:</strong> Exactly 8 species selected</li>
-              <li><strong>Environmental Compatibility:</strong> 100% location match required</li>
-              <li><strong>Ecosystem Balance:</strong> Valid food web with all trophic levels</li>
-              <li><strong>Time Limit:</strong> 35 minutes to complete</li>
-            </ul>
+            
+            <div class="scoring-info">
+              <h4>🏆 Success Criteria:</h4>
+              <ul>
+                <li><strong>Species Count:</strong> Exactly 8 species selected</li>
+                <li><strong>Environmental Compatibility:</strong> 100% location match required</li>
+                <li><strong>Ecosystem Balance:</strong> Valid food web with all trophic levels</li>
+                <li><strong>Time Limit:</strong> 35 minutes to complete</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -108,6 +108,44 @@
 
     <!-- Ocean Cleanup Game -->
     <div v-if="currentGame === 'ocean'">
+      <div class="ocean-objectives">
+        <div class="game-objectives">
+          <h3>🎯 Game Objective</h3>
+          <p>Deploy microbes across 3 ocean sites to achieve optimal cleanup efficiency while managing environmental constraints.</p>
+          
+          <div v-if="!oceanGameActive" class="game-rules">
+            <h4>📋 How to Play:</h4>
+            <div class="rules-list">
+              <div class="rule-item">
+                <span class="rule-icon">🦠</span>
+                <div><strong>Select 3 microbes</strong> from the available pool for each site</div>
+              </div>
+              <div class="rule-item">
+                <span class="rule-icon">📊</span>
+                <div><strong>Match attributes:</strong> Velocity, Absorbency, Resilience must average within site ranges</div>
+              </div>
+              <div class="rule-item">
+                <span class="rule-icon">❄️</span>
+                <div><strong>Required trait:</strong> At least one microbe must be Cold Resistant</div>
+              </div>
+              <div class="rule-item">
+                <span class="rule-icon">☠️</span>
+                <div><strong>Forbidden trait:</strong> No microbes can be Toxic Producers</div>
+              </div>
+            </div>
+            
+            <div class="scoring-info">
+              <h4>🏆 Scoring (per site):</h4>
+              <ul>
+                <li><strong>60%:</strong> Numerical attributes (20% each for Velocity, Absorbency, Resilience)</li>
+                <li><strong>20%:</strong> Required trait present</li>
+                <li><strong>20%:</strong> No forbidden traits</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      
       <div class="ocean-header">
         <h1>Ocean Cleanup Mission</h1>
         <div class="ocean-timer">{{ oceanTimer }}</div>
@@ -130,43 +168,7 @@
         />
       </div>
 
-      <div v-if="!oceanGameActive" class="ocean-objectives">
-        <div class="game-objectives">
-          <h3>🎯 Game Objective</h3>
-          <p>Deploy microbes across 3 ocean sites to achieve optimal cleanup efficiency while managing environmental constraints.</p>
-          
-          <div class="game-rules">
-            <h4>📋 How to Play:</h4>
-            <div class="rules-list">
-              <div class="rule-item">
-                <span class="rule-icon">🦠</span>
-                <div><strong>Select 3 microbes</strong> from the available pool for each site</div>
-              </div>
-              <div class="rule-item">
-                <span class="rule-icon">📊</span>
-                <div><strong>Match attributes:</strong> Velocity, Absorbency, Resilience must average within site ranges</div>
-              </div>
-              <div class="rule-item">
-                <span class="rule-icon">❄️</span>
-                <div><strong>Required trait:</strong> At least one microbe must be Cold Resistant</div>
-              </div>
-              <div class="rule-item">
-                <span class="rule-icon">☠️</span>
-                <div><strong>Forbidden trait:</strong> No microbes can be Toxic Producers</div>
-              </div>
-            </div>
-          </div>
-          
-          <div class="scoring-info">
-            <h4>🏆 Scoring (per site):</h4>
-            <ul>
-              <li><strong>60%:</strong> Numerical attributes (20% each for Velocity, Absorbency, Resilience)</li>
-              <li><strong>20%:</strong> Required trait present</li>
-              <li><strong>20%:</strong> No forbidden traits</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+
       
       <div class="ocean-controls">
         <button v-if="!oceanGameActive" @click="startOceanGame" class="start-btn">
@@ -203,6 +205,86 @@
 
     <!-- Red Rock Study Game -->
     <div v-if="currentGame === 'redrock'">
+      <div class="redrock-objectives">
+        <div class="game-objectives">
+          <h3>🎯 Game Objective</h3>
+          <p>Analyze Red Rock County's economic data through 4 phases to demonstrate data-driven decision making and quantitative reasoning skills.</p>
+          
+          <div v-if="!redRockGameActive" class="game-rules">
+            <h4>📋 How to Play:</h4>
+            <div class="rules-grid">
+              <div class="rule-item">
+                <span class="phase-icon">🔍</span>
+                <div>
+                  <strong>Investigation (5-8 min)</strong><br>
+                  Filter and extract relevant data to Research Journal
+                </div>
+              </div>
+              <div class="rule-item">
+                <span class="phase-icon">📊</span>
+                <div>
+                  <strong>Analysis (10-15 min)</strong><br>
+                  Answer 5 quantitative questions using calculator
+                </div>
+              </div>
+              <div class="rule-item">
+                <span class="phase-icon">📝</span>
+                <div>
+                  <strong>Report (5-8 min)</strong><br>
+                  Write summary and select appropriate charts
+                </div>
+              </div>
+              <div class="rule-item">
+                <span class="phase-icon">⚡</span>
+                <div>
+                  <strong>Mini Cases (8-12 min)</strong><br>
+                  Solve 8 quick analytical challenges (2 min each)
+                </div>
+              </div>
+            </div>
+            
+            <div class="investigation-strategy">
+              <h4>🎯 Investigation Strategy:</h4>
+              <div class="strategy-steps">
+                <div class="strategy-step">
+                  <span class="step-number">1</span>
+                  <div>
+                    <strong>Clarify Research Objective:</strong> Understand what you need to investigate before examining data
+                  </div>
+                </div>
+                <div class="strategy-step">
+                  <span class="step-number">2</span>
+                  <div>
+                    <strong>Filter Relevant Data:</strong> Drag only objective-aligned data to Research Journal, ignore distractions
+                  </div>
+                </div>
+                <div class="strategy-step">
+                  <span class="step-number">3</span>
+                  <div>
+                    <strong>Mind Details:</strong> Look for macro trends but capture units, timeframes, and anomalies
+                  </div>
+                </div>
+                <div class="strategy-step">
+                  <span class="step-number">4</span>
+                  <div>
+                    <strong>Watch for Outliers:</strong> Exceptional data points often carry strategic importance
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="scoring-info">
+              <h4>🏆 Scoring:</h4>
+              <ul>
+                <li><strong>Product Score:</strong> Accuracy of calculations and quality of insights</li>
+                <li><strong>Process Score:</strong> Efficiency and time management</li>
+                <li><strong>Total Time:</strong> 35 minutes for all phases</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      
       <div class="redrock-header">
         <h1>Red Rock Study</h1>
         <div class="redrock-timer">{{ redRockTimer }}</div>
@@ -239,54 +321,6 @@
       />
       
       <div v-if="!redRockGameActive" class="redrock-start">
-        <div class="game-objectives">
-          <h3>🎯 Game Objective</h3>
-          <p>Analyze Red Rock County's economic data through 4 phases to demonstrate data-driven decision making and quantitative reasoning skills.</p>
-          
-          <div class="game-rules">
-            <h4>📋 How to Play:</h4>
-            <div class="rules-grid">
-              <div class="rule-item">
-                <span class="phase-icon">🔍</span>
-                <div>
-                  <strong>Investigation (5-8 min)</strong><br>
-                  Drag relevant data sources to your Research Journal
-                </div>
-              </div>
-              <div class="rule-item">
-                <span class="phase-icon">📊</span>
-                <div>
-                  <strong>Analysis (10-15 min)</strong><br>
-                  Answer 5 quantitative questions using calculator
-                </div>
-              </div>
-              <div class="rule-item">
-                <span class="phase-icon">📝</span>
-                <div>
-                  <strong>Report (5-8 min)</strong><br>
-                  Write summary and select appropriate charts
-                </div>
-              </div>
-              <div class="rule-item">
-                <span class="phase-icon">⚡</span>
-                <div>
-                  <strong>Mini Cases (8-12 min)</strong><br>
-                  Solve 8 quick analytical challenges (2 min each)
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div class="scoring-info">
-            <h4>🏆 Scoring:</h4>
-            <ul>
-              <li><strong>Product Score:</strong> Accuracy of calculations and quality of insights</li>
-              <li><strong>Process Score:</strong> Efficiency and time management</li>
-              <li><strong>Total Time:</strong> 35 minutes for all phases</li>
-            </ul>
-          </div>
-        </div>
-        
         <button @click="startRedRockGame" class="start-redrock-btn">
           Start Red Rock Study (35 min)
         </button>
@@ -741,7 +775,7 @@ export default {
     },
     nextPhase(data) {
       if (this.currentPhase === 'Investigation') {
-        this.journalSources = data || []
+        this.journalSources = data || this.journalSources
       } else if (this.currentPhase === 'Analysis') {
         this.analysisAnswers = data || {}
       } else if (this.currentPhase === 'Report') {
@@ -751,7 +785,7 @@ export default {
       this.currentPhaseIndex++
     },
     updateJournal(sources) {
-      this.journalSources = sources
+      this.journalSources = sources || []
     },
     finishRedRockGame(results) {
       this.miniCaseResults = results

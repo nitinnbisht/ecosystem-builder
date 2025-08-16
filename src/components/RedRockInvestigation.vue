@@ -2,7 +2,19 @@
   <div class="investigation-phase">
     <div class="phase-header">
       <h3>Investigation Phase</h3>
-      <p>Drag relevant data sources to your Research Journal</p>
+      <p><strong>Research Objective:</strong> Analyze Red Rock County's economic development patterns and identify key growth drivers for strategic planning.</p>
+      
+      <div class="investigation-walkthrough">
+        <h4>📝 Step-by-Step Walkthrough:</h4>
+        <ol class="walkthrough-steps">
+          <li><strong>Read Objectives Carefully</strong> — Focus on economic development and growth drivers</li>
+          <li><strong>Scan All Data Elements</strong> — Preview content with objectives in mind</li>
+          <li><strong>Select What's Relevant</strong> — Drag entries that align with economic analysis</li>
+          <li><strong>Record Everything Needed</strong> — Watch for units, scales, and time periods</li>
+          <li><strong>Annotate the Journal</strong> — Mark important entries with priority flags</li>
+          <li><strong>Ignore Distractions</strong> — Skip unrelated information to save time</li>
+        </ol>
+      </div>
     </div>
     
     <div class="investigation-content">
@@ -52,7 +64,7 @@
     </div>
     
     <div class="phase-controls">
-      <button @click="$emit('next-phase')" :disabled="journalSources.length < 3" class="next-btn">
+      <button @click="proceedToAnalysis" :disabled="journalSources.length < 3" class="next-btn">
         Continue to Analysis ({{ journalSources.length }}/5 sources)
       </button>
     </div>
@@ -94,6 +106,17 @@ export default {
     },
     isSourceUsed(sourceId) {
       return this.journalSources.some(s => s.id === sourceId)
+    },
+    proceedToAnalysis() {
+      this.$emit('next-phase', this.journalSources)
+    }
+  },
+  watch: {
+    journalSources: {
+      handler(newSources) {
+        this.$emit('update-journal', newSources)
+      },
+      deep: true
     }
   }
 }
@@ -235,6 +258,30 @@ export default {
   padding: 4px 8px;
   border: 1px solid #dee2e6;
   border-radius: 4px;
+}
+
+.investigation-walkthrough {
+  background: #e7f3ff;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 15px;
+  border-left: 4px solid #007bff;
+}
+
+.investigation-walkthrough h4 {
+  margin-bottom: 10px;
+  color: #2c3e50;
+}
+
+.walkthrough-steps {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.walkthrough-steps li {
+  margin-bottom: 8px;
+  color: #495057;
+  line-height: 1.4;
 }
 
 .phase-controls {

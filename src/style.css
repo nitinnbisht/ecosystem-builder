@@ -629,6 +629,54 @@ body.red-rock-study::before {
   margin-bottom: 20px;
 }
 
+.investigation-strategy {
+  background: #fff3cd;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #ffc107;
+  margin-bottom: 20px;
+}
+
+.investigation-strategy h4 {
+  margin-bottom: 15px;
+  color: #2c3e50;
+}
+
+.strategy-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.strategy-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px;
+  background: rgba(255,255,255,0.7);
+  border-radius: 6px;
+}
+
+.step-number {
+  background: #ffc107;
+  color: #2c3e50;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.9em;
+  flex-shrink: 0;
+}
+
+.strategy-step div {
+  flex: 1;
+  font-size: 0.9em;
+  line-height: 1.4;
+}
+
 @media (max-width: 768px) {
   .rules-grid {
     grid-template-columns: 1fr;
@@ -639,6 +687,12 @@ body.red-rock-study::before {
   }
   
   .rule-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+  }
+  
+  .strategy-step {
     flex-direction: column;
     text-align: center;
     gap: 8px;
