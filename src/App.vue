@@ -1,53 +1,124 @@
 <template>
   <div class="app">
-    <Header 
-      :timer="timer" 
-      :variant="variant"
-      :currentLocation="currentLocation"
-    />
-    
-    <div class="game-area">
-      <EcosystemPanel 
-        :selectedSpecies="selectedSpecies"
-        :ecosystemBalance="ecosystemBalance"
+    <div class="game-switcher">
+      <button :class="['game-btn', { active: currentGame === 'ecosystem' }]" 
+              @click="switchGame('ecosystem')">
+        🌱 Ecosystem Builder
+      </button>
+      <button :class="['game-btn', { active: currentGame === 'ocean' }]" 
+              @click="switchGame('ocean')">
+        🌊 Ocean Cleanup
+      </button>
+    </div>
+
+    <!-- Ecosystem Game -->
+    <div v-if="currentGame === 'ecosystem'">
+      <Header 
+        :timer="timer" 
+        :variant="variant"
         :currentLocation="currentLocation"
-        :locationCompatibility="locationCompatibility"
-        :availableSpecies="availableSpecies"
-        @remove-species="removeSpecies"
-        @use-hint-combination="useHintCombination"
       />
       
-      <SpeciesPanel 
-        :species="availableSpecies"
+      <div class="game-area">
+        <EcosystemPanel 
+          :selectedSpecies="selectedSpecies"
+          :ecosystemBalance="ecosystemBalance"
+          :currentLocation="currentLocation"
+          :locationCompatibility="locationCompatibility"
+          :availableSpecies="availableSpecies"
+          @remove-species="removeSpecies"
+          @use-hint-combination="useHintCombination"
+        />
+        
+        <SpeciesPanel 
+          :species="availableSpecies"
+          :selectedSpecies="selectedSpecies"
+          :currentLocation="currentLocation"
+          @select-species="selectSpecies"
+        />
+      </div>
+
+      <Controls 
+        :gameActive="gameActive"
+        :canSubmit="canSubmit"
+        @start-game="startGame"
+        @clear-all="clearAll"
+        @submit="submitSolution"
+      />
+
+      <GameStatus 
+        :selectedSpecies="selectedSpecies"
+        :ecosystemBalance="ecosystemBalance"
+        :locationCompatibility="locationCompatibility"
+        :totalCaloriesOutput="totalCaloriesOutput"
+        :totalCaloriesIntake="totalCaloriesIntake"
+      />
+
+      <ResultModal 
+        v-if="showResult"
+        :success="gameSuccess"
         :selectedSpecies="selectedSpecies"
         :currentLocation="currentLocation"
-        @select-species="selectSpecies"
+        @restart="restart"
       />
     </div>
 
-    <Controls 
-      :gameActive="gameActive"
-      :canSubmit="canSubmit"
-      @start-game="startGame"
-      @clear-all="clearAll"
-      @submit="submitSolution"
-    />
+    <!-- Ocean Cleanup Game -->
+    <div v-if="currentGame === 'ocean'">
+      <div class="ocean-header">
+        <h1>Ocean Cleanup Mission</h1>
+        <div class="ocean-timer">{{ oceanTimer }}</div>
+      </div>
+      
+      <div class="ocean-game-area">
+        <OceanSitePanel 
+          :currentSite="currentOceanSite"
+          :currentSiteIndex="currentSiteIndex"
+          :selectedMicrobes="selectedMicrobes"
+          :siteScore="currentSiteScore"
+          :showScore="showSiteResult"
+          @remove-microbe="removeMicrobe"
+        />
+        
+        <MicrobeSelectionPanel 
+          :availableMicrobes="availableMicrobes"
+          :selectedMicrobes="selectedMicrobes"
+          @select-microbe="selectMicrobe"
+        />
+      </div>
 
-    <GameStatus 
-      :selectedSpecies="selectedSpecies"
-      :ecosystemBalance="ecosystemBalance"
-      :locationCompatibility="locationCompatibility"
-      :totalCaloriesOutput="totalCaloriesOutput"
-      :totalCaloriesIntake="totalCaloriesIntake"
-    />
+      <div class="ocean-controls">
+        <button v-if="!oceanGameActive" @click="startOceanGame" class="start-btn">
+          Start Ocean Cleanup (35 min)
+        </button>
+        <button v-if="oceanGameActive && !showSiteResult" @click="clearAllMicrobes" class="clear-btn">
+          Clear Selection
+        </button>
+        <button v-if="oceanGameActive && !showSiteResult && canSubmitSite" @click="submitSite" class="submit-btn">
+          Submit Site {{ currentSiteIndex + 1 }}
+        </button>
+        <button v-if="showSiteResult && currentSiteIndex < 2" @click="nextSite" class="next-btn">
+          Next Site
+        </button>
+        <button v-if="showSiteResult && currentSiteIndex === 2" @click="finishGame" class="finish-btn">
+          Finish Game
+        </button>
+      </div>
 
-    <ResultModal 
-      v-if="showResult"
-      :success="gameSuccess"
-      :selectedSpecies="selectedSpecies"
-      :currentLocation="currentLocation"
-      @restart="restart"
-    />
+      <div v-if="gameCompleted" class="game-result">
+        <h2>Ocean Cleanup Mission Complete!</h2>
+        <div class="final-scores">
+          <h3>Site Scores:</h3>
+          <div v-for="(score, index) in siteScores" :key="index" class="site-score">
+            <span>{{ oceanSites[index].name }}: {{ score.total }}%</span>
+          </div>
+          <div class="total-score">
+            <strong>Overall Score: {{ totalGameScore }}%</strong>
+          </div>
+        </div>
+        <button @click="restartOcean">Play Again</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -58,7 +129,10 @@ import SpeciesPanel from './components/SpeciesPanel.vue'
 import Controls from './components/Controls.vue'
 import GameStatus from './components/GameStatus.vue'
 import ResultModal from './components/ResultModal.vue'
+import OceanSitePanel from './components/OceanSitePanel.vue'
+import MicrobeSelectionPanel from './components/MicrobeSelectionPanel.vue'
 import { speciesDatabase, locations, getRandomVariant } from './data/ecosystemData.js'
+import { oceanSites, generateMicrobePool, calculateSiteScore } from './data/oceanData.js'
 
 export default {
   name: 'App',
@@ -68,10 +142,14 @@ export default {
     SpeciesPanel,
     Controls,
     GameStatus,
-    ResultModal
+    ResultModal,
+    OceanSitePanel,
+    MicrobeSelectionPanel
   },
   data() {
     return {
+      currentGame: 'ecosystem',
+      // Ecosystem game data
       gameActive: false,
       timeLeft: 2100,
       timer: '35:00',
@@ -80,7 +158,19 @@ export default {
       currentLocation: null,
       showResult: false,
       gameSuccess: false,
-      timerInterval: null
+      timerInterval: null,
+      // Ocean cleanup game data
+      oceanGameActive: false,
+      oceanTimeLeft: 2100, // 35 minutes total
+      oceanTimer: '35:00',
+      currentSiteIndex: 0,
+      selectedMicrobes: [],
+      availableMicrobes: [],
+      siteScores: [],
+      currentSiteScore: null,
+      showSiteResult: false,
+      gameCompleted: false,
+      oceanTimerInterval: null
     }
   },
   computed: {
@@ -117,6 +207,16 @@ export default {
     },
     canSubmit() {
       return this.selectedSpecies.length === 8 && this.ecosystemBalance.valid && this.locationCompatibility === 100
+    },
+    currentOceanSite() {
+      return oceanSites[this.currentSiteIndex] || oceanSites[0]
+    },
+    canSubmitSite() {
+      return this.selectedMicrobes.length === 3
+    },
+    totalGameScore() {
+      if (this.siteScores.length === 0) return 0
+      return Math.round(this.siteScores.reduce((sum, score) => sum + score.total, 0) / this.siteScores.length)
     }
   },
   methods: {
@@ -284,8 +384,104 @@ export default {
       return viableAnimals.length >= 4
     },
     updateBackgroundClass() {
-      document.body.className = this.variant.toLowerCase().replace(' ', '-')
-    }
+      if (this.currentGame === 'ecosystem') {
+        document.body.className = this.variant.toLowerCase().replace(' ', '-')
+      } else {
+        document.body.className = 'ocean-cleanup'
+      }
+    },
+    // Game switcher methods
+    switchGame(game) {
+      this.currentGame = game
+      this.updateBackgroundClass()
+    },
+    // Ocean Cleanup game methods
+    selectMicrobe(microbe) {
+      if (this.selectedMicrobes.length >= 6) {
+        alert('Maximum 6 microbes allowed!')
+        return
+      }
+      
+      if (this.selectedMicrobes.find(m => m.id === microbe.id)) {
+        alert('Microbe already selected!')
+        return
+      }
+
+      this.selectedMicrobes.push(microbe)
+    },
+    removeMicrobe(microbeId) {
+      this.selectedMicrobes = this.selectedMicrobes.filter(m => m.id !== microbeId)
+    },
+    clearAllMicrobes() {
+      this.selectedMicrobes = []
+    },
+    startOceanGame() {
+      this.oceanGameActive = true
+      this.oceanTimeLeft = 2100 // 35 minutes
+      this.currentSiteIndex = 0
+      this.selectedMicrobes = []
+      this.siteScores = []
+      this.currentSiteScore = null
+      this.showSiteResult = false
+      this.gameCompleted = false
+      this.availableMicrobes = generateMicrobePool(this.currentSiteIndex)
+      
+      this.oceanTimerInterval = setInterval(() => {
+        this.oceanTimeLeft--
+        this.updateOceanTimer()
+        
+        if (this.oceanTimeLeft <= 0) {
+          this.forceFinishGame()
+        }
+      }, 1000)
+    },
+    updateOceanTimer() {
+      const minutes = Math.floor(this.oceanTimeLeft / 60)
+      const seconds = this.oceanTimeLeft % 60
+      this.oceanTimer = `${minutes}:${seconds.toString().padStart(2, '0')}`
+    },
+    submitSite() {
+      const score = calculateSiteScore(this.selectedMicrobes, this.currentOceanSite)
+      this.currentSiteScore = score
+      this.siteScores.push(score)
+      this.showSiteResult = true
+    },
+    nextSite() {
+      this.currentSiteIndex++
+      this.selectedMicrobes = []
+      this.currentSiteScore = null
+      this.showSiteResult = false
+      this.availableMicrobes = generateMicrobePool(this.currentSiteIndex)
+    },
+    finishGame() {
+      this.gameCompleted = true
+      this.oceanGameActive = false
+      
+      if (this.oceanTimerInterval) {
+        clearInterval(this.oceanTimerInterval)
+        this.oceanTimerInterval = null
+      }
+    },
+    forceFinishGame() {
+      // Handle time running out
+      if (this.selectedMicrobes.length === 3 && !this.showSiteResult) {
+        this.submitSite()
+      }
+      this.finishGame()
+    },
+    restartOcean() {
+      this.gameCompleted = false
+      this.oceanGameActive = false
+      this.oceanTimeLeft = 2100
+      this.oceanTimer = '35:00'
+      this.currentSiteIndex = 0
+      this.selectedMicrobes = []
+      this.availableMicrobes = []
+      this.siteScores = []
+      this.currentSiteScore = null
+      this.showSiteResult = false
+    },
+
   },
   mounted() {
     this.variant = getRandomVariant()
@@ -294,6 +490,9 @@ export default {
   },
   watch: {
     variant() {
+      this.updateBackgroundClass()
+    },
+    currentGame() {
       this.updateBackgroundClass()
     }
   }
