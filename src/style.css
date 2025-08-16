@@ -540,6 +540,111 @@ body.red-rock-study::before {
   margin-top: 15px;
 }
 
+/* Game Objectives Styles */
+.game-objectives {
+  background: rgba(255,255,255,0.95);
+  padding: 25px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.game-objectives h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-size: 1.3em;
+}
+
+.game-objectives p {
+  color: #6c757d;
+  margin-bottom: 20px;
+  font-size: 1.1em;
+  line-height: 1.4;
+}
+
+.game-rules h4 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-size: 1.1em;
+}
+
+.rules-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.rules-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.rule-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 3px solid #007bff;
+}
+
+.phase-icon, .rule-icon {
+  font-size: 1.5em;
+  min-width: 30px;
+  text-align: center;
+}
+
+.rule-item div {
+  flex: 1;
+}
+
+.scoring-info {
+  background: #e7f3ff;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #007bff;
+}
+
+.scoring-info h4 {
+  margin-bottom: 10px;
+  color: #2c3e50;
+}
+
+.scoring-info ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.scoring-info li {
+  margin-bottom: 5px;
+  color: #495057;
+}
+
+.ecosystem-objectives, .ocean-objectives {
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .rules-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .game-objectives {
+    padding: 20px;
+  }
+  
+  .rule-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+  }
+}
+
 @media (max-width: 768px) {
   .game-area,
   .ocean-game-area {

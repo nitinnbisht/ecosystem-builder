@@ -17,6 +17,45 @@
 
     <!-- Ecosystem Game -->
     <div v-if="currentGame === 'ecosystem'">
+      <div v-if="!gameActive" class="ecosystem-objectives">
+        <div class="game-objectives">
+          <h3>🎯 Game Objective</h3>
+          <p>Create a balanced ecosystem with 8 species that can survive in the given environmental conditions.</p>
+          
+          <div class="game-rules">
+            <h4>📋 How to Play:</h4>
+            <div class="rules-list">
+              <div class="rule-item">
+                <span class="rule-icon">🌱</span>
+                <div><strong>Select 8 species</strong> from the available pool</div>
+              </div>
+              <div class="rule-item">
+                <span class="rule-icon">🌡️</span>
+                <div><strong>Environmental match:</strong> All species must survive in the location conditions</div>
+              </div>
+              <div class="rule-item">
+                <span class="rule-icon">🍽️</span>
+                <div><strong>Food web balance:</strong> Ensure predators have prey and energy flows correctly</div>
+              </div>
+              <div class="rule-item">
+                <span class="rule-icon">⚖️</span>
+                <div><strong>Ecosystem stability:</strong> Achieve 80%+ stability to win</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="scoring-info">
+            <h4>🏆 Success Criteria:</h4>
+            <ul>
+              <li><strong>Species Count:</strong> Exactly 8 species selected</li>
+              <li><strong>Environmental Compatibility:</strong> 100% location match required</li>
+              <li><strong>Ecosystem Balance:</strong> Valid food web with all trophic levels</li>
+              <li><strong>Time Limit:</strong> 35 minutes to complete</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
       <Header 
         :timer="timer" 
         :variant="variant"
@@ -91,6 +130,44 @@
         />
       </div>
 
+      <div v-if="!oceanGameActive" class="ocean-objectives">
+        <div class="game-objectives">
+          <h3>🎯 Game Objective</h3>
+          <p>Deploy microbes across 3 ocean sites to achieve optimal cleanup efficiency while managing environmental constraints.</p>
+          
+          <div class="game-rules">
+            <h4>📋 How to Play:</h4>
+            <div class="rules-list">
+              <div class="rule-item">
+                <span class="rule-icon">🦠</span>
+                <div><strong>Select 3 microbes</strong> from the available pool for each site</div>
+              </div>
+              <div class="rule-item">
+                <span class="rule-icon">📊</span>
+                <div><strong>Match attributes:</strong> Velocity, Absorbency, Resilience must average within site ranges</div>
+              </div>
+              <div class="rule-item">
+                <span class="rule-icon">❄️</span>
+                <div><strong>Required trait:</strong> At least one microbe must be Cold Resistant</div>
+              </div>
+              <div class="rule-item">
+                <span class="rule-icon">☠️</span>
+                <div><strong>Forbidden trait:</strong> No microbes can be Toxic Producers</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="scoring-info">
+            <h4>🏆 Scoring (per site):</h4>
+            <ul>
+              <li><strong>60%:</strong> Numerical attributes (20% each for Velocity, Absorbency, Resilience)</li>
+              <li><strong>20%:</strong> Required trait present</li>
+              <li><strong>20%:</strong> No forbidden traits</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
       <div class="ocean-controls">
         <button v-if="!oceanGameActive" @click="startOceanGame" class="start-btn">
           Start Ocean Cleanup (35 min)
@@ -162,6 +239,54 @@
       />
       
       <div v-if="!redRockGameActive" class="redrock-start">
+        <div class="game-objectives">
+          <h3>🎯 Game Objective</h3>
+          <p>Analyze Red Rock County's economic data through 4 phases to demonstrate data-driven decision making and quantitative reasoning skills.</p>
+          
+          <div class="game-rules">
+            <h4>📋 How to Play:</h4>
+            <div class="rules-grid">
+              <div class="rule-item">
+                <span class="phase-icon">🔍</span>
+                <div>
+                  <strong>Investigation (5-8 min)</strong><br>
+                  Drag relevant data sources to your Research Journal
+                </div>
+              </div>
+              <div class="rule-item">
+                <span class="phase-icon">📊</span>
+                <div>
+                  <strong>Analysis (10-15 min)</strong><br>
+                  Answer 5 quantitative questions using calculator
+                </div>
+              </div>
+              <div class="rule-item">
+                <span class="phase-icon">📝</span>
+                <div>
+                  <strong>Report (5-8 min)</strong><br>
+                  Write summary and select appropriate charts
+                </div>
+              </div>
+              <div class="rule-item">
+                <span class="phase-icon">⚡</span>
+                <div>
+                  <strong>Mini Cases (8-12 min)</strong><br>
+                  Solve 8 quick analytical challenges (2 min each)
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="scoring-info">
+            <h4>🏆 Scoring:</h4>
+            <ul>
+              <li><strong>Product Score:</strong> Accuracy of calculations and quality of insights</li>
+              <li><strong>Process Score:</strong> Efficiency and time management</li>
+              <li><strong>Total Time:</strong> 35 minutes for all phases</li>
+            </ul>
+          </div>
+        </div>
+        
         <button @click="startRedRockGame" class="start-redrock-btn">
           Start Red Rock Study (35 min)
         </button>
