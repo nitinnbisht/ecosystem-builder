@@ -15,6 +15,9 @@
             </span>
           </div>
           <div class="question-text">{{ question.question }}</div>
+          <div v-if="question.context" class="question-context">
+            <strong>Context:</strong> {{ question.context }}
+          </div>
           <div class="answer-input">
             <input v-model="answers[question.id]" 
                    type="number" 
@@ -170,8 +173,17 @@ export default {
 }
 
 .question-text {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   font-weight: 500;
+}
+
+.question-context {
+  background: #e7f3ff;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  font-size: 0.9em;
+  border-left: 3px solid #007bff;
 }
 
 .answer-input {

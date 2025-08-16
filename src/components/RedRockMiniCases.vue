@@ -21,6 +21,9 @@
         
         <div class="case-question">
           <h4>{{ getCurrentCase().question }}</h4>
+          <div v-if="getCurrentCase().context" class="case-context">
+            <strong>Business Context:</strong> {{ getCurrentCase().context }}
+          </div>
         </div>
         
         <div class="case-answer">
@@ -246,9 +249,18 @@ export default {
 }
 
 .case-question h4 {
-  margin: 0;
+  margin: 0 0 10px 0;
   font-size: 1.1em;
   line-height: 1.4;
+}
+
+.case-context {
+  background: #fff3cd;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  border-left: 3px solid #ffc107;
+  margin-top: 10px;
 }
 
 .multiple-choice {
